@@ -58,7 +58,7 @@ def todoListCreate(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
-@api_view(['GET','PUT'])
+@api_view(['GET','PUT', 'DELETE'])
 def todoUpdate(request, pk):
     
     querset =  Todo.objects.get(id = pk)
@@ -78,6 +78,18 @@ def todoUpdate(request, pk):
             
         return Response(serializer.errors, status=status.HTTP_204_NO_CONTENT)
     
+    elif request.method == "DELETE":
+      
+        querset.delete()
+        return Response("Item Deleted")
+        
     
+
+@api_view(['DELETE'])
+def todoDelete(request, pk):
+    
+    querset =  Todo.objects.get(id = pk)
+    querset.delete()
+    return Response("Item Deleted")
     
     
