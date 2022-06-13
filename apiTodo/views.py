@@ -58,8 +58,26 @@ def todoListCreate(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
-@api_view(['PUT'])
+@api_view(['GET','PUT'])
 def todoUpdate(request, pk):
+    
     querset =  Todo.objects.get(id = pk)
+    
+    if request.method == "GET":
+        serializer = TodoSerializer(querset)
+    
+        return Response(serializer.data)
+        
+    elif request.method == "PUT":
+        
+        serializer = TodoSerializer(instance=querset,  data = request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            
+        return Response(serializer.errors, status=status.HTTP_204_NO_CONTENT)
+    
+    
     
     
