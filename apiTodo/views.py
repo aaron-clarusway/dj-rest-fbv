@@ -46,7 +46,7 @@ def todoListCreate(request):
         querset =  Todo.objects.all()    
         serializer = TodoSerializer(querset, many=True)
     
-        return Response(serializer.data , status=status.HTTP_200_OK)
+        return Response(serializer.data)
     
     elif request.method == "POST":
         serializer = TodoSerializer(data = request.data)
@@ -57,4 +57,9 @@ def todoListCreate(request):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        
+
+@api_view(['PUT'])
+def todoUpdate(request, pk):
+    querset =  Todo.objects.get(id = pk)
+    
+    
