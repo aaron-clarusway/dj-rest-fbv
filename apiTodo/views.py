@@ -1,6 +1,7 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render
 import rest_framework
+from rest_framework import serializers
 
 
 from rest_framework.decorators import api_view
@@ -21,13 +22,16 @@ def hello_world(request):
 
 @api_view(['GET'])
 def todoList(request):
-    querset =  Todo.objects.all()
-    print("querset")
-    print(querset)
-    
+    querset =  Todo.objects.all()    
     serializer = TodoSerializer(querset, many=True)
-    print("serializer")
-    print(serializer)
-    
+   
     return Response(serializer.data)
 
+
+@api_view(['POST'])
+def todoCreate(request):
+    serializer = TodoSerializer(request.data)
+    
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
